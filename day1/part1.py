@@ -6,8 +6,7 @@ def right(original: int, rotation: int) -> int:
     
     The result should be a number in interval [0, 99]
     
-    We use 100 instead of 99 because we have 100 total numbers I 
-    guess
+    We use 100 since modulus of 100 is in interval [0, 99]
     """
     return (original + rotation) % 100
 
@@ -17,8 +16,7 @@ def left(original: int, rotation: int) -> int:
     
     The result is a number in interval [0, 99]
     
-    We use 100 instead of 99 because we have 100 total numbers
-    I guess
+   We use 100 since modulus of 100 is in interval [0, 99]
     """
     
     return (original - rotation) % 100
@@ -69,20 +67,54 @@ def operation_from_string(original: int, operation: str) -> int :
 #     currentPos = operationFromString(original=currentPos, operation=operation)
 #     print(f"The dial is rotated {operation} to point at {currentPos}")
     
-# Import operations from file
-operations = pd.read_csv('day1/input.txt', header=None)
+def part_1():
+    # Import operations from file
+    operations = pd.read_csv('day1/input.txt', header=None)
 
-# Go through all operations
-num_time_at_zero = 0
-current_step = 50
-print(f"The dial starts at {current_step}")
+    # Go through all operations
+    num_time_at_zero = 0
+    current_step = 50
+    print(f"The dial starts at {current_step}")
 
-for operation in operations[0]:
-    # Update position
-    current_step = operation_from_string(original=current_step, operation=operation)
-    print(f"The dial is rotated {operation} to point at {current_step}")
-    # If position = 0 update count
-    if (current_step == 0):
-        num_time_at_zero += 1
+    for operation in operations[0]:
+        # Update position
+        current_step = operation_from_string(original=current_step, operation=operation)
+        print(f"The dial is rotated {operation} to point at {current_step}")
+        # If position = 0 update count
+        if (current_step == 0):
+            num_time_at_zero += 1
+            
+    print(f"The code is {num_time_at_zero}")
+    
+def part_2():
+    # Import operations from file
+    operations = pd.read_csv('day1/input.txt', header=None)
+    
+    # Go through all operations
+    num_time_touched_zero = 0
+    current_step = 50
+    previous_step = 0
+    print(f"The dial starts at {current_step}")
+
+    for operation in operations[0]:
+        previous_step = current_step
+        # Update position
+        current_step = operation_from_string(original=current_step, operation=operation)
+        print(f"The dial is rotated {operation} to point at {current_step}")
         
-print(f"The code is {num_time_at_zero}")
+        operationType = operation[:1]
+        rotation = int(operation[1:])
+        if (operationType == "R"):
+            num_time_touched_zero += (previous_step + rotation) // 100
+        elif (operationType == "L"):
+            num_time_touched_zero += rotation // 100
+            if (previous_step == 0):
+                pass
+            else:
+                if (current_step > previous_step or current_step == 0):
+                    num_time_touched_zero += 1
+                
+    print(f"The code is {num_time_touched_zero}")
+    
+part_2()
+                
