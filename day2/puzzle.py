@@ -29,4 +29,39 @@ def get_invalid_id(X: int, n: int) -> int:
 def get_first_last_number_from_range(range: str) -> (int, int):
     numbers = range.split('-')
     assert len(numbers) >= 2
-    return numbers[0], numbers[-1]
+    return int(numbers[0]), int(numbers[-1])
+
+def part_1():
+    # Get input from file
+    ranges = ['11-22', '95-115', '998-1012', '1188511880-1188511890', '222220-222224', '1698522-1698528', '446443-446449', '38593856-38593862']
+    sum_invalid_ids = 0
+    
+    # For each range in input
+    for invalid_range in ranges:
+        print(f"PROCESSING RANGE {invalid_range}, sum of invalid ids is {sum_invalid_ids}")
+        # Get first and last number from input
+        f, l = get_first_last_number_from_range(invalid_range)
+        
+        # Get m of first and last number
+        f_m = get_number_digits(f)
+        l_m = get_number_digits(l)
+        
+        # Get list of all m's in between that of first and last number
+        valid_ms = []
+        for possible_m in range(f_m, l_m + 1):
+            if possible_m % 2 == 0:
+                valid_ms.append(possible_m)
+                
+        print(f"Valid m values {valid_ms} for f -> {f} and l -> {l}")
+        
+        # From this list get valid m's, where m is an even number
+        
+        # Get list of all possible X's for getting invalid numbers (in between those of first and last number)
+        
+        # Get all possible invalid numbers
+        
+        # Add together those that are in range [f, l]
+        
+part_1()
+        
+        
