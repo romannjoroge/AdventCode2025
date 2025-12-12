@@ -5,7 +5,7 @@ Let number of digits in a number be m
 For a number to be invalid ID m must be even (so that you can have sequence of digit repeated twice)
 Let n be m / 2
 
-Let a valid number be XX where X is a positive integer
+Let an invalid number be XX where X is a positive integer
 We know that 10^(n-1) <= X < 10^n
 We know that formula for a number with digit repeated twice, i, is
 i = X(10^n + 1)
@@ -19,3 +19,9 @@ def get_number_digits(x: int) -> int:
         x = x // 10
         m += 1
     return m
+
+def get_invalid_id(X: int, n: int) -> int:
+    assert n >= 1, "n must be at least 1 for it to be a sequence of digits repeated twice"
+    assert (10 ** (n - 1)) <= X and X < 10 ** n, "Invalid X value" 
+    i = X * ((10 ** n) + 1)
+    return i
