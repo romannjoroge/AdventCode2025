@@ -38,7 +38,7 @@ def part_1():
     
     # For each range in input
     for invalid_range in ranges:
-        print(f"PROCESSING RANGE {invalid_range}, sum of invalid ids is {sum_invalid_ids}")
+        print(f"\n PROCESSING RANGE {invalid_range}, sum of invalid ids is {sum_invalid_ids}")
         # Get first and last number from input
         f, l = get_first_last_number_from_range(invalid_range)
         
@@ -49,19 +49,51 @@ def part_1():
         # Get list of all m's in between that of first and last number
         valid_ms = []
         for possible_m in range(f_m, l_m + 1):
-            if possible_m % 2 == 0:
+            # From this list get valid m's, where m is an even number
+            if possible_m % 2 == 0 and possible_m > 0:
                 valid_ms.append(possible_m)
                 
         print(f"Valid m values {valid_ms} for f -> {f} and l -> {l}")
+        if len(valid_ms) == 0:
+            print("No valid m so skipping")
+            continue
         
-        # From this list get valid m's, where m is an even number
+        if len(valid_ms) == 1:
+            valid_m = valid_ms[0]
+            n = valid_m / 2
+            # Get list of all possible X's for getting invalid numbers (in between those of first and last number)
+            f_X = int(f // ((10 ** n) + 1))
+            l_X = int(l // ((10 ** n) + 1))
         
-        # Get list of all possible X's for getting invalid numbers (in between those of first and last number)
+            print(f"The valid m is {valid_m}, first valid X is {f_X} and last valid X is {l_X}")    
+            
+            valid_Xs = []
+            for X in range(f_X, l_X + 1):
+                if (10 ** (n - 1)) <= X and X < 10 ** n:
+                    valid_Xs.append(X)
+            
+            if len(valid_Xs) == 0:
+                print("No valid Xs skipping")
+                continue
+            
+            # Get all possible invalid numbers
+            all_possible_invalid = [get_invalid_id(X, n) for X in valid_Xs]
+            print(f"All Possible invalid {all_possible_invalid}")
+            
+            while True:
+                if all_possible_invalid[0] < f:
+                    all_possible_invalid.pop(0)
+                else:
+                    break
+            
+            print(f"Possible invalid values that are in range of f and l {all_possible_invalid}")
+            
+            # Add together those that are in range [f, l]
+            sum_invalid_ids += sum(all_possible_invalid)
+        else:
+            raise "Got more than 1 valid m, need to handle this case"
         
-        # Get all possible invalid numbers
-        
-        # Add together those that are in range [f, l]
-        
+    print(f"Answer is {sum_invalid_ids}")
 part_1()
         
         
