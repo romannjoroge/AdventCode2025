@@ -25,3 +25,8 @@ def get_invalid_id(X: int, n: int) -> int:
     assert (10 ** (n - 1)) <= X and X < 10 ** n, "Invalid X value" 
     i = X * ((10 ** n) + 1)
     return i
+
+def get_first_last_number_from_range(range: str) -> (int, int):
+    numbers = range.split('-')
+    assert len(numbers) >= 2
+    return numbers[0], numbers[-1]
