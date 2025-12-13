@@ -14,6 +14,9 @@ We can use the range of X and the formula of i to get all numbers with digit rep
 """
 
 def get_number_digits(x: int) -> int:
+    """
+    Function for getting the number of digits that are in a number
+    """
     m = 0
     while (x > 0):
         x = x // 10
@@ -21,12 +24,18 @@ def get_number_digits(x: int) -> int:
     return m
 
 def get_invalid_id(X: int, n: int) -> int:
+    """
+    Function for getting a fake product ID from an X and n value
+    """
     assert n >= 1, "n must be at least 1 for it to be a sequence of digits repeated twice"
     assert (10 ** (n - 1)) <= X and X < 10 ** n, "Invalid X value" 
     i = X * ((10 ** n) + 1)
     return i
 
 def get_first_last_number_from_range(range: str) -> (int, int):
+    """
+    Function for getting the first and last number in the provided number range
+    """
     numbers = range.split('-')
     assert len(numbers) >= 2
     return int(numbers[0]), int(numbers[-1])
