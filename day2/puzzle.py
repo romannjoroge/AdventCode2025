@@ -135,7 +135,7 @@ d_configurations = {
 def part_2():
     # Get input from file
     # input_text = "269194394-269335492,62371645-62509655,958929250-958994165,1336-3155,723925-849457,4416182-4470506,1775759815-1775887457,44422705-44477011,7612653647-7612728309,235784-396818,751-1236,20-36,4-14,9971242-10046246,8796089-8943190,34266-99164,2931385381-2931511480,277-640,894249-1083306,648255-713763,19167863-19202443,62-92,534463-598755,93-196,2276873-2559254,123712-212673,31261442-31408224,421375-503954,8383763979-8383947043,17194-32288,941928989-941964298,3416-9716"
-    input_text = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862"
+    input_text = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
     ranges = input_text.split(",")
     sum_invalid_ids = 0
     
@@ -147,7 +147,7 @@ def part_2():
         num_digits_f = get_number_digits(f)
         num_digits_l = get_number_digits(l)
         
-        invalid_ids = []
+        invalid_ids = set()
         
         if num_digits_f == num_digits_l:
             print("Both f and l have same number of digits")
@@ -163,15 +163,41 @@ def part_2():
                 for possible_d in range(f_d, 10 ** n):
                     possible_invalid = get_part2_invalid_id(possible_d, x, n)
                     if (possible_invalid >= f and possible_invalid <= l):
-                        invalid_ids.append(possible_invalid)
+                        invalid_ids.add(possible_invalid)
                     elif (possible_invalid > l):
                         break
-                        
-                print(f"Possible invalids for {n} configuration is {invalid_ids}")
         else:
             print(f"f has {num_digits_f} while l has {num_digits_l}")
-            pass
-        
+            
+            # Handling possible ids from f to most number with same digits as f
+            num_digits_d_config = d_configurations[num_digits_f]
+            for n in num_digits_d_config:
+                x = num_digits_f / n
+                r = 10 ** n
+                f_d = int(f // r ** (x - 1))
+                print(f"f_d is {f_d} when f is {f} num_digits_f is {num_digits_f} r is {r} and x is {x} and n is {n}")
+                
+                for possible_d in range(f_d, 10 ** n):
+                    possible_invalid = get_part2_invalid_id(possible_d, x, n)
+                    if (possible_invalid >= f):
+                        invalid_ids.add(possible_invalid)
+                        
+            # Handling possible ids from smallest number with same digits as l to l
+            num_digits_d_config = d_configurations[num_digits_l]
+            for n in num_digits_d_config:
+                x = num_digits_l / n
+                r = 10 ** n
+                l_d = int(l // r ** (x - 1))
+                print(f"l_d is {l_d} when l is {l} num_digits_l is {num_digits_l} r is {r} and x is {x} and n is {n}")
+                
+                for possible_d in range(10 ** (n - 1) , l_d + 1):
+                    possible_invalid = get_part2_invalid_id(d=possible_d, x=x, n=n)
+                    if (possible_invalid <= l):
+                        invalid_ids.add(possible_invalid)
+                    else:
+                        break
+                    
+        print(f"Possible invalids for {n} configuration is {invalid_ids}")
         sum_invalid_ids += sum(invalid_ids)
         
 part_2()
