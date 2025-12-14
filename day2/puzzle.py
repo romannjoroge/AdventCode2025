@@ -40,6 +40,21 @@ def get_first_last_number_from_range(range: str) -> (int, int):
     assert len(numbers) >= 2
     return int(numbers[0]), int(numbers[-1])
 
+def get_part2_invalid_id(d: int, x: int, n: int) -> int:
+    """
+    Function for getting invalid id where there is a sequence of numbers d with n digits repeated x times
+    """
+    assert x > 1, "n must be greater than 2"
+    assert (10 ** (n - 1)) <= d and d < 10 ** n, "Invalid d value"
+    
+    r = 10 ** n
+    print(f"r {r} r ^ x {r ** x} 1 - r {1 - r}")
+    denominator = 1 - r
+    numerator = d * (1 - r ** x)
+    i = numerator / denominator
+    return i 
+    
+
 def part_1():
     # Get input from file
     input_text = "269194394-269335492,62371645-62509655,958929250-958994165,1336-3155,723925-849457,4416182-4470506,1775759815-1775887457,44422705-44477011,7612653647-7612728309,235784-396818,751-1236,20-36,4-14,9971242-10046246,8796089-8943190,34266-99164,2931385381-2931511480,277-640,894249-1083306,648255-713763,19167863-19202443,62-92,534463-598755,93-196,2276873-2559254,123712-212673,31261442-31408224,421375-503954,8383763979-8383947043,17194-32288,941928989-941964298,3416-9716"
@@ -104,6 +119,44 @@ def part_1():
             raise "Got more than 1 valid m, need to handle this case"
         
     print(f"Answer is {sum_invalid_ids}")
-part_1()
+
+d_configurations = {
+    2: [1],
+    3: [1],
+    4: [2, 1],
+    5: [1],
+    6: [1, 2, 3],
+    7: [1],
+    8: [1, 2, 4],
+    9: [1, 3],
+    10: [1, 2, 5]
+}
+
+# Hoping I can do something similar for part 2
+def part_2():
+    # Get input from file
+    input_text = "269194394-269335492,62371645-62509655,958929250-958994165,1336-3155,723925-849457,4416182-4470506,1775759815-1775887457,44422705-44477011,7612653647-7612728309,235784-396818,751-1236,20-36,4-14,9971242-10046246,8796089-8943190,34266-99164,2931385381-2931511480,277-640,894249-1083306,648255-713763,19167863-19202443,62-92,534463-598755,93-196,2276873-2559254,123712-212673,31261442-31408224,421375-503954,8383763979-8383947043,17194-32288,941928989-941964298,3416-9716"
+    ranges = input_text.split(",")
+    sum_invalid_ids = 0
+    
+    # For each range in input
+    for invalid_range in ranges:
+        print(f"\n PROCESSING RANGE {invalid_range}, sum of invalid ids is {sum_invalid_ids}")
+        # Get first and last number from input
+        f, l = get_first_last_number_from_range(invalid_range)
+        num_digits_f = get_number_digits(f)
+        num_digits_l = get_number_digits(l)
+        
+        if num_digits_f == num_digits_l:
+            # Get possible d configurations
+            num_digits_d_config = d_configurations[num_digits_f]
+            for n in num_digits_d_config:
+                pass
+        else:
+            pass
         
         
+d = 34512
+x = 2
+invalid_id = get_part2_invalid_id(d, x, 5)
+print(f"Invalid id of {d} repeated {x} times is {invalid_id}")
