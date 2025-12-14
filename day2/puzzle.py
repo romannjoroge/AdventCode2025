@@ -48,7 +48,6 @@ def get_part2_invalid_id(d: int, x: int, n: int) -> int:
     assert (10 ** (n - 1)) <= d and d < 10 ** n, "Invalid d value"
     
     r = 10 ** n
-    print(f"r {r} r ^ x {r ** x} 1 - r {1 - r}")
     denominator = 1 - r
     numerator = d * (1 - r ** x)
     i = numerator / denominator
@@ -148,18 +147,31 @@ def part_2():
         num_digits_f = get_number_digits(f)
         num_digits_l = get_number_digits(l)
         
+        invalid_ids = []
+        
         if num_digits_f == num_digits_l:
             print("Both f and l have same number of digits")
             # Get possible d configurations
             num_digits_d_config = d_configurations[num_digits_f]
-            invalid_ids = []
             for n in num_digits_d_config:
                 x = num_digits_f / n
                 r = 10 ** n
-                f_d = f // r ** (x - 1)
+                f_d = int(f // r ** (x - 1))
                 print(f"f_d is {f_d} when f is {f} num_digits_f is {num_digits_f} r is {r} and x is {x} and n is {n}")
+                
+                # Get invalid_ids in this configuration
+                for possible_d in range(f_d, 10 ** n):
+                    possible_invalid = get_part2_invalid_id(possible_d, x, n)
+                    if (possible_invalid >= f and possible_invalid <= l):
+                        invalid_ids.append(possible_invalid)
+                    elif (possible_invalid > l):
+                        break
+                        
+                print(f"Possible invalids for {n} configuration is {invalid_ids}")
         else:
             print(f"f has {num_digits_f} while l has {num_digits_l}")
             pass
+        
+        sum_invalid_ids += sum(invalid_ids)
         
 part_2()
