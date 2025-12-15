@@ -44,6 +44,31 @@ def part_1():
         
     print(f"Solution is {solution}")
     
-part_1()
+def part_2():
+    bank = ['987654321111111', '811111111111119', '234234234234278', '818181911112111']
+    solution = 0
+    for list_string in bank:
+        list_int = [int(s) for s in list_string]
+        starting_index = -1
+        current_pos = 0
+        joltage_size = 12
+        buffer = len(list_int) - joltage_size
+        number_parts = []
+        
+        print(f"\n PROCESSING {list_string} with buffer {buffer}")
+        
+        while current_pos < joltage_size:
+            # Get end position for current start position
+            end_pos = current_pos + buffer 
+            # Search area is slice from start_index + 1 to end post
+            search_area = list_int[starting_index + 1:end_pos + 1]
+            largest_in_search, index = find_largest_number(search_area)
+            starting_index = starting_index + 1 + index
+            number_parts.append(largest_in_search)
+            print(f"The largest number in position {current_pos} with end position {end_pos} is {largest_in_search} with new starting position of {starting_index}")
+            current_pos += 1
+            
+part_2()
+
 
 
