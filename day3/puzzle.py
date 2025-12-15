@@ -45,9 +45,10 @@ def part_1():
     print(f"Solution is {solution}")
     
 def part_2():
-    bank = ['987654321111111', '811111111111119', '234234234234278', '818181911112111']
+    # bank = ['987654321111111', '811111111111119', '234234234234278', '818181911112111']
+    banks = pd.read_csv('day3/input.txt', header=None)
     solution = 0
-    for list_string in bank:
+    for list_string in banks[0]:
         list_int = [int(s) for s in list_string]
         starting_index = -1
         current_pos = 0
@@ -70,7 +71,10 @@ def part_2():
         
         largest_number = int("".join(map(str, number_parts)))
         print(f"Largest possible number is {largest_number}")
+        solution += largest_number
             
+    print(f"Solution is {solution}")
+    
 part_2()
 
 
