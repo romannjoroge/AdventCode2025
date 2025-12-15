@@ -1,3 +1,5 @@
+import pandas as pd
+
 """
 Our joltage values, j , 1 <= j <= 9
 
@@ -20,6 +22,28 @@ def find_largest_number(bank: list[int]) -> (int, int):
             
     return largest, largest_index
 
-list_string = '987654321111111'
-list_int = [int(s) for s in list_string]
-print(f"Largest number is {find_largest_number(list_int)} for {list_int}")
+def part_1():
+    banks = pd.read_csv('day3/input.txt', header=None)
+    solution = 0
+    
+    for list_string in banks[0]:
+        list_int = [int(s) for s in list_string]
+        end_index = len(list_int) - 1
+        x = 0
+        y = 0
+        x, index_x = find_largest_number(list_int)
+        if (index_x < end_index):
+            new_list = list_int[index_x + 1:]
+            y, _ = find_largest_number(new_list)
+        else:
+            y = x
+            new_list = list_int[:end_index]
+            x, _ = find_largest_number(new_list)
+            
+        solution += (x * 10) + y
+        
+    print(f"Solution is {solution}")
+    
+part_1()
+
+
