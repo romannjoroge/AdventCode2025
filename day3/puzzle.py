@@ -65,8 +65,11 @@ def part_2():
             largest_in_search, index = find_largest_number(search_area)
             starting_index = starting_index + 1 + index
             number_parts.append(largest_in_search)
-            print(f"The largest number in position {current_pos} with end position {end_pos} is {largest_in_search} with new starting position of {starting_index}")
+            # print(f"The largest number in position {current_pos} with end position {end_pos} is {largest_in_search} with new starting position of {starting_index}")
             current_pos += 1
+        
+        largest_number = int("".join(map(str, number_parts)))
+        print(f"Largest possible number is {largest_number}")
             
 part_2()
 
