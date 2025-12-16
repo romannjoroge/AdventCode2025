@@ -61,20 +61,20 @@ def part_1():
             
     print(f"The number of rolls that are reachable are {sum_reachable}")
     
-graph = [
-    "..@@.@@@@.",
-    "@@@.@.@.@@",
-    "@@@@@.@.@@",
-    "@.@@@@..@.",
-    "@@.@@@@.@@",
-    ".@@@@@@@.@",
-    ".@.@.@.@@@",
-    "@.@@@.@@@@",
-    ".@@@@@@@@.",
-    "@.@.@@@.@."
-]
-# raw_input = pd.read_csv("day4/input.txt", header=None)
-# graph = raw_input[0]
+# graph = [
+#     "..@@.@@@@.",
+#     "@@@.@.@.@@",
+#     "@@@@@.@.@@",
+#     "@.@@@@..@.",
+#     "@@.@@@@.@@",
+#     ".@@@@@@@.@",
+#     ".@.@.@.@@@",
+#     "@.@@@.@@@@",
+#     ".@@@@@@@@.",
+#     "@.@.@@@.@."
+# ]
+raw_input = pd.read_csv("day4/input.txt", header=None)
+graph = raw_input[0]
 width = len(graph[0])
 height = len(graph)
 
