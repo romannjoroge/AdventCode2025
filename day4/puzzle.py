@@ -61,6 +61,10 @@ def part_1():
             
     print(f"The number of rolls that are reachable are {sum_reachable}")
     
+def print_graph():
+    for row in graph:
+        print(row)
+    
 # graph = [
 #     "..@@.@@@@.",
 #     "@@@.@.@.@@",
@@ -85,6 +89,6 @@ print(f"Width is {width} and height is {height}")
 print(f"g of Position at ({x_graph}, {y_graph}) is {g(x_graph=x_graph, y_graph=y_graph)}")
 # print(f"The number of paper rolls around position ({x_graph}, {y_graph}) is {r(x_graph=x_graph, y_graph=y_graph)}")
 # print(f"Is position ({x_graph, y_graph}) accessible by forklift {a(x_graph=x_graph, y_graph=y_graph)}")
-part_1()
+print_graph()
 
 
