@@ -1,3 +1,4 @@
+import time
 """
 We know the following information about this problem:
 
@@ -204,5 +205,9 @@ def part_2():
         sum_invalid_ids += sum(invalid_ids)
 
     print(f"Sum of invalid ids is {sum_invalid_ids}")
-        
+      
+start_time = time.perf_counter()  
 part_2()
+end_time = time.perf_counter()
+elapsed_time = end_time - start_time
+print(f"Elapsed time is {elapsed_time:.4f}")

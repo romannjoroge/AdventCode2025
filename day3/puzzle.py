@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 
 """
 Our joltage values, j , 1 <= j <= 9
@@ -75,7 +76,11 @@ def part_2():
             
     print(f"Solution is {solution}")
     
+start_time = time.perf_counter()
 part_2()
+end_time = time.perf_counter()
+elapsed_time = end_time - start_time
+print(f"Code took {elapsed_time:.4f}")
 
 
 
