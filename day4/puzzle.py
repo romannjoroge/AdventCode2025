@@ -64,21 +64,31 @@ def part_1():
 def print_graph():
     for row in graph:
         print(row)
+        
+def markRemoved(x_graph: int, y_graph: int):
+    # x and y can only be 1 in a fixed range of values
     
-# graph = [
-#     "..@@.@@@@.",
-#     "@@@.@.@.@@",
-#     "@@@@@.@.@@",
-#     "@.@@@@..@.",
-#     "@@.@@@@.@@",
-#     ".@@@@@@@.@",
-#     ".@.@.@.@@@",
-#     "@.@@@.@@@@",
-#     ".@@@@@@@@.",
-#     "@.@.@@@.@."
-# ]
-raw_input = pd.read_csv("day4/input.txt", header=None)
-graph = raw_input[0]
+    if (0 <= x_graph and x_graph <= width - 1) and (0 <= y_graph and y_graph <= height - 1) : 
+        x_list = x_graph
+        y_list = height - 1 - y_graph
+        graph[y_list] = graph[y_list][:x_list] + "X" + graph[y_list][x_list + 1:]
+    
+
+    
+graph = [
+    "..@@.@@@@.",
+    "@@@.@.@.@@",
+    "@@@@@.@.@@",
+    "@.@@@@..@.",
+    "@@.@@@@.@@",
+    ".@@@@@@@.@",
+    ".@.@.@.@@@",
+    "@.@@@.@@@@",
+    ".@@@@@@@@.",
+    "@.@.@@@.@."
+]
+# raw_input = pd.read_csv("day4/input.txt", header=None)
+# graph = raw_input[0]
 width = len(graph[0])
 height = len(graph)
 
@@ -89,6 +99,7 @@ print(f"Width is {width} and height is {height}")
 print(f"g of Position at ({x_graph}, {y_graph}) is {g(x_graph=x_graph, y_graph=y_graph)}")
 # print(f"The number of paper rolls around position ({x_graph}, {y_graph}) is {r(x_graph=x_graph, y_graph=y_graph)}")
 # print(f"Is position ({x_graph, y_graph}) accessible by forklift {a(x_graph=x_graph, y_graph=y_graph)}")
-print_graph()
+# print_graph()
+part_2()
 
 
