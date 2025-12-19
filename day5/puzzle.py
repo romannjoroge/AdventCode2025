@@ -36,6 +36,14 @@ unioned_inequalities = []
 
 inequalities_input = ["3-5", "10-14", "16-20", "12-18"]
 
+def is_case_b(inequality1: Inequality, inequality2: Inequality) -> bool:
+    """
+    Function returns whether two inequalities are in case B
+    
+    For them to be in case B it means that there is no overlap between them
+    """
+    return (inequality1.high < inequality2.low) or (inequality2.high < inequality1.low)
+
 def combine_inequalities(inequality: Inequality):
     """
     This function combines the given in equality to the list of unioned inequalites to get a new list of unioned inequalites
@@ -52,8 +60,9 @@ def combine_inequalities(inequality: Inequality):
         
     
     # For each item in union inequalities list
-    
+    for index, item in enumerate(unioned_inequalities):
         # Determine the case of input and item
+        pass
         
         # If case B move to next item
         
@@ -74,7 +83,12 @@ def process_raw_inequalities():
 test_raw_inequality = "3-5"
 test_inequality = Inequality.from_string(test_raw_inequality)
 print(test_inequality)
-combine_inequalities(test_inequality)
+
+test_inequality_2 = Inequality.from_string("4-5")
+
+print(f"Is {test_inequality} and {test_inequality_2} in case B => {is_case_b(test_inequality, test_inequality_2)}")
+
+# combine_inequalities(test_inequality)
 # unioned_inequalities.append(test_inequality)
 
 # test_raw_inequality_2 = "10-14"
