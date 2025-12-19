@@ -28,7 +28,7 @@ class Inequality:
         
         return cls(x, y)
     
-    def __str__(self):
+    def __repr__(self):
         """Returns a readable version of inequality that can be used by the print function"""
         return f"[{self.low}, {self.high}]"
 
@@ -62,15 +62,16 @@ def combine_inequalities(inequality: Inequality):
     # For each item in union inequalities list
     for index, item in enumerate(unioned_inequalities):
         # Determine the case of input and item
-        pass
-        
-        # If case B move to next item
-        
+        if is_case_b(inequality1=inequality, inequality2=item):
+            # If case B move to next item
+            continue
         # Else combine the inequalities
             # Set item to not case B
             # Remove item from list, replace input with combination, call again and return
             
     # Add inequality to list
+    unioned_inequalities.append(inequality)
+    print(f"Inequality {inequality} has been added to list to make {unioned_inequalities}")
 
 def process_raw_inequalities():
     """
@@ -82,14 +83,9 @@ def process_raw_inequalities():
 
 test_raw_inequality = "3-5"
 test_inequality = Inequality.from_string(test_raw_inequality)
-print(test_inequality)
 
-test_inequality_2 = Inequality.from_string("4-5")
-
-print(f"Is {test_inequality} and {test_inequality_2} in case B => {is_case_b(test_inequality, test_inequality_2)}")
-
-# combine_inequalities(test_inequality)
-# unioned_inequalities.append(test_inequality)
-
+unioned_inequalities.append(test_inequality)
+combine_inequalities(Inequality.from_string("10-14"))
+combine_inequalities(Inequality.from_string("20-25"))
 # test_raw_inequality_2 = "10-14"
 
