@@ -108,6 +108,34 @@ def part_1():
     
     # Print solution
     print(f"\nNumber of fresh items is {num_fresh}")
+    
+def part_1():
+    num_fresh = 0
+    # Get final combined inequality
+    process_raw_inequalities()
+    
+    # Compare each ingredient id with union inequality
+    for raw_ingredient in ingredient_ids:
+        ingredient_id = int(raw_ingredient)
+        for item in unioned_inequalities:
+            if item.test_number(ingredient_id):
+                num_fresh += 1
+                break
+    
+    # Print solution
+    print(f"\nNumber of fresh items is {num_fresh}")
+    
+def part_2():
+    num_fresh_ids = 0
+    # Get final combined inequality
+    process_raw_inequalities()
+    
+    # Get number of ids in each inequality
+    for item in unioned_inequalities:
+        num_fresh_ids += (item.high - item.low) + 1
+    
+    # Print solution
+    print(f"\nNumber of fresh items is {num_fresh_ids}")
  
 blank_found = False   
 inequalities_input = []
@@ -125,4 +153,5 @@ with open("day5/input.txt") as file:
             inequalities_input.append(formatted_line)
 
 # print(f"Extracted inequalities are {inequalities_input} and extracted ingredient_id are {ingredient_ids}")
-part_1()
+# part_1()
+part_2()
