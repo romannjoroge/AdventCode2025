@@ -3,7 +3,7 @@ This puzzle uses inequalities to find the solution
 """
 class Inequality:
     def __init__(self, low: int, high: int):
-        assert low < high, "Low should be less than high"
+        assert low <= high, "Low should be less than high"
         self.low = low
         self.high = high
         
@@ -16,7 +16,7 @@ class Inequality:
         
         The function extracts x and y from string and makes class instance from this
         
-        This function assumes that x is less than y
+        This function assumes that x is <= y
         """
         nums = inequality_string.split('-')
         if len(nums) != 2:
@@ -25,7 +25,7 @@ class Inequality:
         x = int(nums[0])
         y = int(nums[1])
         
-        assert x < y, "The first number in inequality should be lower than second"
+        assert x <= y, f"The first number in inequality {inequality_string} should be <= than second {x}, {y}"
         
         return cls(x, y)
     
@@ -52,12 +52,12 @@ def combine_inequalities(inequality: Inequality):
     This function combines the given in equality to the list of unioned inequalites to get a new list of unioned inequalites
     """
     global unioned_inequalities
-    print(f"Combining {inequality} to {unioned_inequalities}")
+    # print(f"Combining {inequality} to {unioned_inequalities}")
     
     
     # If unioned_inequalities is empty add inequality to list and end
     if len(unioned_inequalities) == 0:
-        print(f"Inequality list was empty, adding {inequality} to list")
+        # print(f"Inequality list was empty, adding {inequality} to list")
         unioned_inequalities.append(inequality)
         return
         
@@ -73,7 +73,7 @@ def combine_inequalities(inequality: Inequality):
         new_inequality_low = min(item.low, inequality.low)
         new_inequality_high = max(item.high, inequality.high)
         new_inequality = Inequality(new_inequality_low, new_inequality_high)
-        print(f"Inequality {inequality} could combine with {item} to form {new_inequality}")
+        # print(f"Inequality {inequality} could combine with {item} to form {new_inequality}")
         
         # Remove item from list, replace input with combination, call again and return
         del unioned_inequalities[index]
@@ -82,7 +82,7 @@ def combine_inequalities(inequality: Inequality):
             
     # Add inequality to list
     unioned_inequalities.append(inequality)
-    print(f"Inequality {inequality} has been added to list to make {unioned_inequalities}")
+    # print(f"Inequality {inequality} has been added to list to make {unioned_inequalities}")
 
 def process_raw_inequalities():
     """
@@ -124,4 +124,5 @@ with open("day5/input.txt") as file:
         else:
             inequalities_input.append(formatted_line)
 
-print(f"Extracted inequalities are {inequalities_input} and extracted ingredient_id are {ingredient_ids}")
+# print(f"Extracted inequalities are {inequalities_input} and extracted ingredient_id are {ingredient_ids}")
+part_1()
