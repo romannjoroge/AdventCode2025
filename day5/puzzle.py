@@ -39,9 +39,6 @@ class Inequality:
 
 unioned_inequalities: list[Inequality] = []
 
-inequalities_input = ["3-5", "10-14", "16-20", "12-18"]
-ingredient_ids = ["1", "5", "8", "11", "17", "32"]
-
 def is_case_b(inequality1: Inequality, inequality2: Inequality) -> bool:
     """
     Function returns whether two inequalities are in case B
@@ -111,5 +108,20 @@ def part_1():
     
     # Print solution
     print(f"\nNumber of fresh items is {num_fresh}")
-    
-part_1()
+ 
+blank_found = False   
+inequalities_input = []
+ingredient_ids = []
+with open("day5/input.txt") as file:
+    for line in file:
+        formatted_line = line.strip()
+        if (formatted_line == ""):
+            blank_found = True
+            continue
+            
+        if blank_found:
+            ingredient_ids.append(formatted_line)
+        else:
+            inequalities_input.append(formatted_line)
+
+print(f"Extracted inequalities are {inequalities_input} and extracted ingredient_id are {ingredient_ids}")
