@@ -29,6 +29,10 @@ class Inequality:
         
         return cls(x, y)
     
+    def test_number(self, num: int) -> bool:
+        """This function tests if a number is in the range of inequality"""
+        return self.high >= num >= self.low
+    
     def __repr__(self):
         """Returns a readable version of inequality that can be used by the print function"""
         return f"[{self.low}, {self.high}]"
@@ -87,16 +91,23 @@ def process_raw_inequalities():
     This function processes inequalities input to get list of unioned inequalities
     """
     for raw_inequality in inequalities_input:
-        pass
+        combine_inequalities(Inequality.from_string(raw_inequality))
+        
+    print(f"Final combined inequality is {unioned_inequalities}")
     
-
-test_raw_inequality = "3-5"
-test_inequality = Inequality.from_string(test_raw_inequality)
-
-unioned_inequalities.append(test_inequality)
-combine_inequalities(Inequality.from_string("4-14"))
-combine_inequalities(Inequality.from_string("20-25"))
-combine_inequalities(Inequality.from_string("13-20"))
-combine_inequalities(Inequality.from_string("30-40"))
-# test_raw_inequality_2 = "10-14"
-
+def part_1():
+    num_fresh = 0
+    # Get final combined inequality
+    process_raw_inequalities()
+    
+    # Compare each item with inequality
+    
+    # Print solution
+    
+# part_1()
+test_inequality = Inequality.from_string("10-20")
+print(f"Is 10 in {test_inequality}: {test_inequality.test_number(10)}")
+print(f"Is 20 in {test_inequality}: {test_inequality.test_number(20)}")
+print(f"Is 15 in {test_inequality}: {test_inequality.test_number(15)}")
+print(f"Is 1 in {test_inequality}: {test_inequality.test_number(1)}")
+print(f"Is 30 in {test_inequality}: {test_inequality.test_number(30)}")
