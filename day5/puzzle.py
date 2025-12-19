@@ -1,6 +1,8 @@
 """
 This puzzle uses inequalities to find the solution
 """
+import time
+
 class Inequality:
     def __init__(self, low: int, high: int):
         assert low <= high, "Low should be less than high"
@@ -137,21 +139,27 @@ def part_2():
     # Print solution
     print(f"\nNumber of fresh items is {num_fresh_ids}")
  
-blank_found = False   
-inequalities_input = []
-ingredient_ids = []
-with open("day5/input.txt") as file:
-    for line in file:
-        formatted_line = line.strip()
-        if (formatted_line == ""):
-            blank_found = True
-            continue
-            
-        if blank_found:
-            ingredient_ids.append(formatted_line)
-        else:
-            inequalities_input.append(formatted_line)
+if __name__ == "__main__":
+    # Timing how long
+    start_time = time.perf_counter()
+    blank_found = False   
+    inequalities_input = []
+    ingredient_ids = []
+    with open("day5/input.txt") as file:
+        for line in file:
+            formatted_line = line.strip()
+            if (formatted_line == ""):
+                blank_found = True
+                continue
+                
+            if blank_found:
+                ingredient_ids.append(formatted_line)
+            else:
+                inequalities_input.append(formatted_line)
 
-# print(f"Extracted inequalities are {inequalities_input} and extracted ingredient_id are {ingredient_ids}")
-# part_1()
-part_2()
+    # print(f"Extracted inequalities are {inequalities_input} and extracted ingredient_id are {ingredient_ids}")
+    # part_1()
+    part_2()
+    end_time = time.perf_counter()
+    elapsed_time = end_time - start_time
+    print(f"My code has taken {elapsed_time:.4f} seconds")
