@@ -40,6 +40,7 @@ class Inequality:
 unioned_inequalities: list[Inequality] = []
 
 inequalities_input = ["3-5", "10-14", "16-20", "12-18"]
+ingredient_ids = ["1", "5", "8", "11", "17", "32"]
 
 def is_case_b(inequality1: Inequality, inequality2: Inequality) -> bool:
     """
@@ -100,14 +101,15 @@ def part_1():
     # Get final combined inequality
     process_raw_inequalities()
     
-    # Compare each item with inequality
+    # Compare each ingredient id with union inequality
+    for raw_ingredient in ingredient_ids:
+        ingredient_id = int(raw_ingredient)
+        for item in unioned_inequalities:
+            if item.test_number(ingredient_id):
+                num_fresh += 1
+                break
     
     # Print solution
+    print(f"\nNumber of fresh items is {num_fresh}")
     
-# part_1()
-test_inequality = Inequality.from_string("10-20")
-print(f"Is 10 in {test_inequality}: {test_inequality.test_number(10)}")
-print(f"Is 20 in {test_inequality}: {test_inequality.test_number(20)}")
-print(f"Is 15 in {test_inequality}: {test_inequality.test_number(15)}")
-print(f"Is 1 in {test_inequality}: {test_inequality.test_number(1)}")
-print(f"Is 30 in {test_inequality}: {test_inequality.test_number(30)}")
+part_1()
