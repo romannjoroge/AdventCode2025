@@ -3,6 +3,7 @@ This puzzle uses inequalities to find the solution
 """
 class Inequality:
     def __init__(self, low: int, high: int):
+        assert low < high, "Low should be less than high"
         self.low = low
         self.high = high
         
@@ -32,7 +33,7 @@ class Inequality:
         """Returns a readable version of inequality that can be used by the print function"""
         return f"[{self.low}, {self.high}]"
 
-unioned_inequalities = []
+unioned_inequalities: list[Inequality] = []
 
 inequalities_input = ["3-5", "10-14", "16-20", "12-18"]
 
@@ -65,9 +66,17 @@ def combine_inequalities(inequality: Inequality):
         if is_case_b(inequality1=inequality, inequality2=item):
             # If case B move to next item
             continue
+        
         # Else combine the inequalities
-            # Set item to not case B
-            # Remove item from list, replace input with combination, call again and return
+        new_inequality_low = min(item.low, inequality.low)
+        new_inequality_high = max(item.high, inequality.high)
+        new_inequality = Inequality(new_inequality_low, new_inequality_high)
+        print(f"Inequality {inequality} could combine with {item} to form {new_inequality}")
+        
+        # Remove item from list, replace input with combination, call again and return
+        del unioned_inequalities[index]
+        combine_inequalities(new_inequality)
+        return
             
     # Add inequality to list
     unioned_inequalities.append(inequality)
@@ -85,7 +94,9 @@ test_raw_inequality = "3-5"
 test_inequality = Inequality.from_string(test_raw_inequality)
 
 unioned_inequalities.append(test_inequality)
-combine_inequalities(Inequality.from_string("10-14"))
+combine_inequalities(Inequality.from_string("4-14"))
 combine_inequalities(Inequality.from_string("20-25"))
+combine_inequalities(Inequality.from_string("13-20"))
+combine_inequalities(Inequality.from_string("30-40"))
 # test_raw_inequality_2 = "10-14"
 
