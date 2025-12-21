@@ -83,10 +83,11 @@ def part_2():
     # Get stream for each line in file
     with open("day6/input.txt", "r") as file:
         lines = [line for line in file]
-        operations = [line.strip() for line in lines[-1]]
         raw_numbers = lines[0:-1]
+        operations = lines[-1]
         
         columns = []
+        column_number = 0
         start = 0
         
         while True:
@@ -99,8 +100,12 @@ def part_2():
                 possible_column_space = get_column_space_position(nums, start=start)
                 end = max(end, possible_column_space)
              
+            new_column = [row[start:end] for row in raw_numbers]
+            new_column.append(operations[start])
             start = end + 1
-            print(f"Found column space at {end}")
+            column_number += 1
+            columns.append(new_column)
+            print(f"Found column space {new_column}")
                
             
             
