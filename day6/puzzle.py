@@ -66,7 +66,6 @@ def get_column_space_position(x: str, start: int) -> int:
     column_space = start
     
     for char in x[start:]:
-        print(f"Looking at {char}, {char.isspace()}")
         if number_found:
             if char.isspace():
                 break
@@ -87,13 +86,25 @@ def part_2():
         operations = [line.strip() for line in lines[-1]]
         raw_numbers = lines[0:-1]
         
-    #     for args in zip(*iterators):
-    #         print(f"Answer for operation is {cephalapod_math(args)}")
-    #         result += cephalapod_math(args)
+        columns = []
+        start = 0
+        
+        while True:
+            print(f"Processing {raw_numbers} from start: {start}")
+            if len(raw_numbers[0]) <= start:
+                break
+            
+            end = start
+            for nums in raw_numbers:
+                possible_column_space = get_column_space_position(nums, start=start)
+                end = max(end, possible_column_space)
+             
+            start = end + 1
+            print(f"Found column space at {end}")
+               
+            
+            
             
     # print(f"Result is {result}")
     
-# part_2()
-start = 0
-test_string = "123 328  51 64"
-print(f"Next column space if starting at {start} for {test_string} is {get_column_space_position(test_string, start=start)}")                
+part_2()         
