@@ -29,7 +29,6 @@ def part_1():
 # part_1()
 
 def cephalapod_math(item: list[str]) -> int:
-    print(f"Doing cephalapod math for {item}")
     raw_numbers = item[0:-1]
     operation = item[-1]
     intepreted_nums = []
@@ -49,8 +48,6 @@ def cephalapod_math(item: list[str]) -> int:
             intepreted_nums.append(int(num_to_add))
             place += 1
             
-    print(f"Interpreted nums are {intepreted_nums}")
-        
     if operation == "+":
         return sum(intepreted_nums)
     else:
@@ -86,12 +83,8 @@ def part_2():
         raw_numbers = lines[0:-1]
         operations = lines[-1]
         
-        columns = []
-        column_number = 0
         start = 0
-        
         while True:
-            print(f"Processing {raw_numbers} from start: {start}")
             if len(raw_numbers[0]) <= start:
                 break
             
@@ -102,14 +95,10 @@ def part_2():
              
             new_column = [row[start:end] for row in raw_numbers]
             new_column.append(operations[start])
+            result += cephalapod_math(new_column)
             start = end + 1
-            column_number += 1
-            columns.append(new_column)
             print(f"Found column space {new_column}")
-               
             
-            
-            
-    # print(f"Result is {result}")
+        print(f"Result is {result}")
     
 part_2()         
