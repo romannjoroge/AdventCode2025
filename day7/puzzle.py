@@ -33,7 +33,7 @@ def part_1():
                 beams.add(x_graph)
                 break
             
-        print(f"Found beams {beams}")        
+        # print(f"Found beams {beams}")        
         # Find colliding splinters for each beam
         for y_graph in range(tachyon_manifold_height - 2, -1, -1):
             # For each beam check if there is a splinter at corresponding y and x
@@ -53,7 +53,7 @@ def part_1():
                     if right_beam <= tachyon_manifold_width:
                         beams.add(right_beam)
                         
-                    print(f"New beams {beams} at y {y_graph} split at {beam}")
+                    # print(f"New beams {beams} at y {y_graph} split at {beam}")
                     
         print(f"Has split {num_times_splinter_in_path} times")
 
