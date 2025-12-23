@@ -8,7 +8,7 @@ Add up numbers from each line
 When reach end of line of any line stop
 """
 import math
-import re
+import time
 
 def part_1():
     result = 0
@@ -100,5 +100,9 @@ def part_2():
             print(f"Found column space {new_column}")
             
         print(f"Result is {result}")
-    
+   
+start_time = time.perf_counter() 
 part_2()         
+end_time = time.perf_counter()
+elapsed_time = end_time - start_time
+print(f"My code took {elapsed_time:.4f} seconds")
