@@ -2,6 +2,8 @@ tachyon_manifold = []
 tachyon_manifold_width = 0
 tachyon_manifold_height = 0
 
+import time
+
 def get_item_at_coordinate(x_graph: int, y_graph: int) -> str:
     """
     Get's the item at a coordinate. Item can either be S, . or ^
@@ -57,4 +59,8 @@ def part_1():
                     
         print(f"Has split {num_times_splinter_in_path} times")
 
+start_time = time.perf_counter()
 part_1()
+end_time = time.perf_counter()
+elapsed_time = end_time - start_time
+print(f"My code took {elapsed_time:.4f} seconds")
