@@ -26,10 +26,15 @@ def part_1():
         tachyon_manifold_height = len(tachyon_manifold)
         tachyon_manifold_width = len(tachyon_manifold[0])
         
-        # Find starting coordinate
+        # Find starting coordinate assuming it's at y = height
+        for x_graph in range(tachyon_manifold_width):
+            if get_item_at_coordinate(x_graph=x_graph, y_graph=tachyon_manifold_height - 1) == "S":
+                # Insert a beam
+                beams.add(x_graph)
+                break
+            
+        print(f"Found beams {beams}")
         
         # Find colliding splinters for each beam
         
 part_1()
-
-print(get_item_at_coordinate(7, 13))
