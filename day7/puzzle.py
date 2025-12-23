@@ -54,5 +54,7 @@ def part_1():
                         beams.add(right_beam)
                         
                     print(f"New beams {beams} at y {y_graph} split at {beam}")
+                    
+        print(f"Has split {num_times_splinter_in_path} times")
 
 part_1()
