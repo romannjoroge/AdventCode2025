@@ -107,7 +107,119 @@ class Beam:
     def __hash__(self):
         return hash((self.parent, self.x))
     
+class Node:
+    def __init__(self, splinter: Splinter):
+        self.splinter = splinter
+        self.left = None
+        self.right = None
+        
+    def assing_left_child(self, left: 'Node'):
+        self.left = left
+        
+    def assign_right_child(self, right: 'Node'):
+        self.right = right
+        
+    def __repr__(self):
+        return f"Node at {self.splinter}"
+    
+def build_tree(node: Node):
+    """
+    Function that builds tree from a node
+    """
+    children: list[Splinter] = node_index[node.splinter.to_id()]
+    if len(children) == 0:
+        return
+    elif len(children) == 1:
+        child = children[0]
+        # Check if child is left
+        if child.x < node.splinter.x:
+            left_child = Node(splinter=child)
+            node.assing_left_child(left=left_child)
+            build_tree(left_child)
+        else:
+            right_child = Node(splinter=child)
+            node.assign_right_child(right_child)
+            build_tree(right_child)
+    else:
+        child_1 = children[0]
+        child_2 = children[1]
+        
+        # Child 1 is left child
+        if child_1.x < node.splinter.x:
+            left_child = Node(splinter=child_1)
+            right_child = Node(splinter=child_2)
+            node.assign_right_child(right=right_child)
+            node.assing_left_child(left=left_child)
+            build_tree(left_child)
+            build_tree(right_child)
+        else:
+            left_child = Node(splinter=child_2)
+            right_child = Node(splinter=child_1)
+            node.assign_right_child(right=right_child)
+            node.assing_left_child(left=left_child)
+            build_tree(left_child)
+            build_tree(right_child)
+    
 node_index = defaultdict(list)
+
+def print_tree(node: Node):
+    """
+    Print's tree by getting children at each level of manifold
+    """
+    line_level = node.splinter.y
+    queue: set[Node] = [node]
+    
+    def add_node_queue(node: Node):
+        """
+        Adds node to queue in a way that respects line level and order of arrival in queue
+        """
+        if node == None:
+            return 
+        
+        if len(queue) == 0:
+            queue.append(node)
+        else:
+            item_added = False
+            for index, item in enumerate(queue):
+                if item.splinter.y < node.splinter.y:
+                    queue.insert(index, node)
+                    item_added = True
+                    break
+                
+            if item_added == False:
+                queue.append(node)
+    
+    while line_level >= 0:
+        nodes_x_in_level = []
+        first_item: Node = None
+        # Get first item in queue
+        if len(queue) > 0:
+            first_item: Node = queue[0]
+        else:
+            break
+        
+        
+        # If first item is at line level add it to list
+        while first_item.splinter.y == line_level:
+            nodes_x_in_level.append(first_item.splinter.x)
+            # Pop first item and add its adjecent children to queue
+            queue.remove(first_item)
+            add_node_queue(first_item.left)
+            add_node_queue(first_item.right)
+            if len(queue) > 0:
+                first_item = queue[0]
+            else:
+                break
+            
+        string_to_print = ""
+        for x_graph in range(tachyon_manifold_width):
+            if x_graph in nodes_x_in_level:
+                string_to_print += '^'
+            else:
+                string_to_print += ' '
+                
+        print(string_to_print)
+        line_level -= 1
 
 def part_2():
     """
@@ -178,6 +290,14 @@ def part_2():
         print(f"\nThe Node Lookup Table\n")
         print(node_index)
         
+        # Construct tree from lookup table
+        root_node = Node(splinter=root_splinter)
+        build_tree(root_node)
+        
+        print(f"\nConstructed Tree\n")
+        print_tree(root_node)
+        
+        print(f"Num")
         
 part_2()
     
