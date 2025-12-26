@@ -108,22 +108,22 @@ def get_num_paths_from_node(node: Node) -> int:
     Function for recursively getting number of paths in node by recursively
     adding up number of paths from children
     """
-    print(f"Getting number of points for node ({node.x_graph}, {node.y_graph})")
     sum = 0
+    print(f"Getting number of paths from ({node.x_graph}, {node.y_graph}) with left {node.left} and right {node.right}")
     
     if node.left == None:
+        print(f"No left child just add 1")
         sum += 1
-        print(f"Node has no left child adding 1 to sum {sum}")
     else:
+        print("Getting for sum of left")
         sum += get_num_paths_from_node(node.left)
-        print(f"Node had left child {node.left} making new sum {sum}")
         
     if node.right == None:
+        print(f"No right child just adding 1 to sum")
         sum += 1
-        print(f"Node had no right child, adding 1 to make sum {sum}")
     else:
+        print(f"Gettign sum for right {node.right}")
         sum += get_num_paths_from_node(node.right)
-        print(f"Node had right child {node.right} adding its sum to get {sum}")
         
     return sum
 
@@ -160,17 +160,30 @@ def find_left_right_child(node: Node):
     else:
         node.assign_right(None)
         
+        
+visited_nodes = []
+
 def build_tree(node: Node):
     """
     This function builds a tree by finding left and right child of a node then doing the same for their children
-    """
-    # Find children of node
-    find_left_right_child(node=node)
-    if node.left != None:
-        build_tree(node.left)
-    if node.right != None:
-        build_tree(node.right)
-        
+    """    
+    queue = [node]
+    
+    while len(queue) > 0:
+        item = queue.pop()
+        print(f"Building {item} and queue has {len(queue)} items")
+        find_left_right_child(item)
+        if item.left != None:
+            if item.left not in visited_nodes:
+                print(f"Adding left child {item.left} to queue")
+                queue.append(item.left)
+        if item.right != None:
+            if item.right not in visited_nodes:
+                print(f"Adding right child {item.right} to queue")
+                queue.append(item.right)
+        visited_nodes.append(item)
+      
+    
 def print_tree(node: Node):
     """
     Print's tree by getting children at each level of manifold
@@ -238,6 +251,7 @@ def part_2():
     root_node = None
     first_beam_x = None
     # Import data
+    print("Building tree")
     with open("day7/input.txt", 'r') as file:
         tachyon_manifold = [line.strip() for line in file]
         tachyon_manifold_height = len(tachyon_manifold)
@@ -258,8 +272,11 @@ def part_2():
         
     
     build_tree(root_node)
+    print(f"\nBuilt tree \n")
     print_tree(root_node)
     # Calculate all possible paths
+    total_paths = get_num_paths_from_node(root_node)
+    print(f"\nThere are {total_paths} paths from root")
                     
         
 
