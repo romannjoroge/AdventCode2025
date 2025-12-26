@@ -126,6 +126,40 @@ def get_num_paths_from_node(node: Node) -> int:
         print(f"Node had right child {node.right} adding its sum to get {sum}")
         
     return sum
+
+def find_left_right_child(node: Node):
+    """
+    Gets the left and right child of a node
+    """
+    left_child_x = node.x_graph - 1
+    right_child_x = node.x_graph + 1
+    
+    # If possible left and right child x within tachyeon manifold look for them
+    if 0 <= left_child_x:
+        left_found = False
+        for y_graph in range(node.y_graph, -1, -1):
+            if get_item_at_coordinate(x_graph=left_child_x, y_graph=y_graph) == "^":
+                node.assign_left(Node(x_graph=left_child_x, y_graph=y_graph))
+                left_found = True
+                break
+                      
+        if left_found == False:
+            node.assign_left(None)
+    else:
+        node.assign_left(None)
+    if right_child_x <= tachyon_manifold_width:
+        right_found = False
+        for y_graph in range(node.y_graph, -1, -1):
+            if get_item_at_coordinate(x_graph=right_child_x, y_graph=y_graph) == "^":
+                node.assign_right(Node(x_graph=right_child_x, y_graph=y_graph))
+                right_found = True
+                break
+            
+        if right_found == False:
+            node.assign_right(None)
+    else:
+        print(f"Right child x is {right_child_x} is {tachyon_manifold_width}")
+        node.assign_right(None)
     
 def part_2():
     global tachyon_manifold_width
@@ -156,6 +190,8 @@ def part_2():
         
     
     print(f"Root node is {root_node} and x coordinate of first beam is {first_beam_x}")
+    find_left_right_child(root_node)
+    print(f"Left child of node is {root_node.left} and right child of node is {root_node.right}")
     # Calculate all possible paths
                     
         
