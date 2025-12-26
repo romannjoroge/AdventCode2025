@@ -3,6 +3,7 @@ tachyon_manifold_width = 0
 tachyon_manifold_height = 0
 
 import time
+from collections import deque
 
 def get_item_at_coordinate(x_graph: int, y_graph: int) -> str:
     """
@@ -59,186 +60,75 @@ def part_1():
                     
         print(f"Has split {num_times_splinter_in_path} times")
         
-class Node:
+class Splinter:
     def __init__(self, x_graph: int, y_graph: int):
-        self.y_graph = y_graph
-        self.x_graph = x_graph
-        self.left = None
-        self.right = None
-        
-    def assign_left(self, left: 'Node'):
-        self.left = left
-        
-    def assign_right(self, right: 'Node'):
-        self.right = right
+        self.x = x_graph
+        self.y = y_graph
         
     def __repr__(self):
-        return f"Node with coordinate ({self.x_graph}, {self.y_graph})"
+        return f"Splinter at ({self.x}, {self.y})"
+    
+    @classmethod
+    def from_id(cls, id: str):
+        coordinates = id.split(',')
+        assert len(coordinates) >= 2 , "Invalid id"
+        x_graph = int(coordinates[0])
+        y_graph = int(coordinates[1])
+        return cls(x_graph=x_graph, y_graph=y_graph)
+    
+    def to_id(self) -> str:
+        return f"{self.x},{self.y}"
     
     def __eq__(self, other):
         if other == None:
             return False
-        elif not isinstance(other, Node):
-            return False
-        return self.y_graph == other.y_graph and self.x_graph == other.x_graph
-    
+        if isinstance(other, Splinter):
+            return self.x == other.x and self.y == other.y
+        
     def __hash__(self):
-        return hash((self.x_graph, self.y_graph))
+        return hash(self.to_id())
+    
+class Beam:
+    def __init__(self, parent_splinter: Splinter, x: int):
+        self.parent = parent_splinter
+        self.x = x
+    
+    def __repr__(self):
+        if self.parent == None:
+            return "The first beam"
+        return f"Beam that came from {self.parent} with x = {self.x}"
+    
+    def __eq__(self, other):
+        if other == None:
+            return False
+        if isinstance(other, Beam):
+            return self.parent == other.parent and self.x == other.x
+        
+    def __hash__(self):
+        return hash((self.parent, self.x))
+    
+node_index = {}
 
-def get_num_paths_from_node(node: Node) -> int:
-    """
-    Function for recursively getting number of paths in node by recursively
-    adding up number of paths from children
-    """
-    sum = 0
-    print(f"Getting number of paths from ({node.x_graph}, {node.y_graph}) with left {node.left} and right {node.right}")
-    
-    if node.left == None:
-        print(f"No left child just add 1")
-        sum += 1
-    else:
-        print("Getting for sum of left")
-        sum += get_num_paths_from_node(node.left)
-        
-    if node.right == None:
-        print(f"No right child just adding 1 to sum")
-        sum += 1
-    else:
-        print(f"Gettign sum for right {node.right}")
-        sum += get_num_paths_from_node(node.right)
-       
-    print(f"Sum is {sum} for node {node}") 
-    return sum
-
-def find_left_right_child(node: Node):
-    """
-    Gets the left and right child of a node
-    """
-    left_child_x = node.x_graph - 1
-    right_child_x = node.x_graph + 1
-    
-    # If possible left and right child x within tachyeon manifold look for them
-    if 0 <= left_child_x:
-        left_found = False
-        for y_graph in range(node.y_graph, -1, -1):
-            if get_item_at_coordinate(x_graph=left_child_x, y_graph=y_graph) == "^":
-                node.assign_left(Node(x_graph=left_child_x, y_graph=y_graph))
-                left_found = True
-                break
-                      
-        if left_found == False:
-            node.assign_left(None)
-    else:
-        node.assign_left(None)
-    if right_child_x <= tachyon_manifold_width:
-        right_found = False
-        for y_graph in range(node.y_graph, -1, -1):
-            if get_item_at_coordinate(x_graph=right_child_x, y_graph=y_graph) == "^":
-                node.assign_right(Node(x_graph=right_child_x, y_graph=y_graph))
-                right_found = True
-                break
-            
-        if right_found == False:
-            node.assign_right(None)
-    else:
-        node.assign_right(None)
-        
-        
-visited_nodes = []
-
-def build_tree(node: Node):
-    """
-    This function builds a tree by finding left and right child of a node then doing the same for their children
-    """    
-    queue = [node]
-    
-    while len(queue) > 0:
-        item = queue.pop(0)
-        # print(f"Processing item {item} and queue is {queue}")
-        find_left_right_child(item)
-        if item.left != None:
-            queue.append(item.left)
-                
-        if item.right != None:
-            queue.append(item.right)
-                
-        # visited_nodes.append(item)
-      
-    
-def print_tree(node: Node):
-    """
-    Print's tree by getting children at each level of manifold
-    """
-    line_level = node.y_graph
-    queue: set[Node] = [node]
-    
-    def add_node_queue(node: Node):
-        """
-        Adds node to queue in a way that respects line level and order of arrival in queue
-        """
-        if node == None:
-            return 
-        
-        if len(queue) == 0:
-            queue.append(node)
-        else:
-            item_added = False
-            for index, item in enumerate(queue):
-                if item.y_graph < node.y_graph:
-                    queue.insert(index, node)
-                    item_added = True
-                    break
-                
-            if item_added == False:
-                queue.append(node)
-    
-    while line_level >= 0:
-        nodes_x_in_level = []
-        # Get first item in queue
-        if len(queue) > 0:
-            first_item = queue[0]
-        else:
-            break
-        
-        
-        # If first item is at line level add it to list
-        while first_item.y_graph == line_level:
-            nodes_x_in_level.append(first_item.x_graph)
-            # Pop first item and add its adjecent children to queue
-            queue.remove(first_item)
-            add_node_queue(first_item.left)
-            add_node_queue(first_item.right)
-            if len(queue) > 0:
-                first_item = queue[0]
-            else:
-                break
-            
-        string_to_print = ""
-        for x_graph in range(tachyon_manifold_width):
-            if x_graph in nodes_x_in_level:
-                string_to_print += '^'
-            else:
-                string_to_print += ' '
-                
-        print(string_to_print)
-        line_level -= 1
-    
 def part_2():
+    """
+    Solving part 2
+    """
+    
     global tachyon_manifold_width
     global tachyon_manifold
     global tachyon_manifold_height
     
-    # Get tree with possible paths
-    root_node = None
-    first_beam_x = None
-    # Import data
-    print("Building tree")
+    beams: set[Beam] = set()
+    
+    # Input data
     with open("day7/input.txt", 'r') as file:
         tachyon_manifold = [line.strip() for line in file]
         tachyon_manifold_height = len(tachyon_manifold)
         tachyon_manifold_width = len(tachyon_manifold[0])
         
-        # Find coordinate of first beam
+        first_beam_x = 0
+    
+        # Get first beam
         for x_graph in range(tachyon_manifold_width):
             if get_item_at_coordinate(x_graph=x_graph, y_graph=tachyon_manifold_height - 1) == "S":
                 # Insert a beam
@@ -246,25 +136,20 @@ def part_2():
                 break
         
         # Find root node
+        root_splinter = None
         for y_graph in range(tachyon_manifold_height - 2, -1, -1):
             if get_item_at_coordinate(x_graph=first_beam_x, y_graph=y_graph) == "^":
-                root_node = Node(x_graph=first_beam_x, y_graph=y_graph)
+                root_splinter = Splinter(x_graph=first_beam_x, y_graph=y_graph)
+                left_beam = Beam(parent_splinter=root_splinter, x=first_beam_x - 1)
+                right_beam = Beam(parent_splinter=root_splinter, x=first_beam_x + 1)
+                beams.add(left_beam)
+                beams.add(right_beam)
                 break
         
-    
-    build_tree(root_node)
-    print(f"\nBuilt tree \n")
-    print_tree(root_node)
-    # Calculate all possible paths
-    total_paths = get_num_paths_from_node(root_node)
-    print(f"\nThere are {total_paths} paths from root")
-                    
+        # Build index table with all nodes and the nodes that they can reach
+        print(f"Beams should only have first pair of beams {beams} and root splinter is {root_splinter}")
         
-
-# start_time = time.perf_counter()
-# part_1()
-# end_time = time.perf_counter()
-# elapsed_time = end_time - start_time
-# print(f"My code took {elapsed_time:.4f} seconds")
-
+        
 part_2()
+    
+    
