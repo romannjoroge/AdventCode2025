@@ -158,8 +158,76 @@ def find_left_right_child(node: Node):
         if right_found == False:
             node.assign_right(None)
     else:
-        print(f"Right child x is {right_child_x} is {tachyon_manifold_width}")
         node.assign_right(None)
+        
+def build_tree(node: Node):
+    """
+    This function builds a tree by finding left and right child of a node then doing the same for their children
+    """
+    # Find children of node
+    find_left_right_child(node=node)
+    if node.left != None:
+        build_tree(node.left)
+    if node.right != None:
+        build_tree(node.right)
+        
+def print_tree(node: Node):
+    """
+    Print's tree by getting children at each level of manifold
+    """
+    line_level = node.y_graph
+    queue: set[Node] = [node]
+    
+    def add_node_queue(node: Node):
+        """
+        Adds node to queue in a way that respects line level and order of arrival in queue
+        """
+        if node == None:
+            return 
+        
+        if len(queue) == 0:
+            queue.append(node)
+        else:
+            item_added = False
+            for index, item in enumerate(queue):
+                if item.y_graph < node.y_graph:
+                    queue.insert(index, node)
+                    item_added = True
+                    break
+                
+            if item_added == False:
+                queue.append(node)
+    
+    while line_level >= 0:
+        nodes_x_in_level = []
+        # Get first item in queue
+        if len(queue) > 0:
+            first_item = queue[0]
+        else:
+            break
+        
+        
+        # If first item is at line level add it to list
+        while first_item.y_graph == line_level:
+            nodes_x_in_level.append(first_item.x_graph)
+            # Pop first item and add its adjecent children to queue
+            queue.remove(first_item)
+            add_node_queue(first_item.left)
+            add_node_queue(first_item.right)
+            if len(queue) > 0:
+                first_item = queue[0]
+            else:
+                break
+            
+        string_to_print = ""
+        for x_graph in range(tachyon_manifold_width):
+            if x_graph in nodes_x_in_level:
+                string_to_print += '^'
+            else:
+                string_to_print += ' '
+                
+        print(string_to_print)
+        line_level -= 1
     
 def part_2():
     global tachyon_manifold_width
@@ -189,9 +257,8 @@ def part_2():
                 break
         
     
-    print(f"Root node is {root_node} and x coordinate of first beam is {first_beam_x}")
-    find_left_right_child(root_node)
-    print(f"Left child of node is {root_node.left} and right child of node is {root_node.right}")
+    build_tree(root_node)
+    print_tree(root_node)
     # Calculate all possible paths
                     
         
