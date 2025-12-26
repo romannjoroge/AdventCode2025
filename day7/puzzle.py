@@ -84,24 +84,6 @@ class Node:
     
     def __hash__(self):
         return hash((self.x_graph, self.y_graph))
-    
-class Beam:
-    def __init__(self, x_graph: int, parent_node: Node):
-        self.x_graph = x_graph
-        self.parent_node = parent_node
-        
-    def __repr__(self):
-        return f"Beam: x = {self.x_graph} from {self.parent_node}"
-    
-    def __eq__(self, other):
-        if other == None:
-            return False
-        elif not isinstance(other, Beam):
-            return False
-        return self.x_graph == other.x_graph and self.parent_node == other.parent_node
-    
-    def __hash__(self):
-        return hash((self.x_graph, self.parent_node))
 
 def get_num_paths_from_node(node: Node) -> int:
     """
@@ -124,7 +106,8 @@ def get_num_paths_from_node(node: Node) -> int:
     else:
         print(f"Gettign sum for right {node.right}")
         sum += get_num_paths_from_node(node.right)
-        
+       
+    print(f"Sum is {sum} for node {node}") 
     return sum
 
 def find_left_right_child(node: Node):
@@ -170,18 +153,16 @@ def build_tree(node: Node):
     queue = [node]
     
     while len(queue) > 0:
-        item = queue.pop()
-        print(f"Building {item} and queue has {len(queue)} items")
+        item = queue.pop(0)
+        # print(f"Processing item {item} and queue is {queue}")
         find_left_right_child(item)
         if item.left != None:
-            if item.left not in visited_nodes:
-                print(f"Adding left child {item.left} to queue")
-                queue.append(item.left)
+            queue.append(item.left)
+                
         if item.right != None:
-            if item.right not in visited_nodes:
-                print(f"Adding right child {item.right} to queue")
-                queue.append(item.right)
-        visited_nodes.append(item)
+            queue.append(item.right)
+                
+        # visited_nodes.append(item)
       
     
 def print_tree(node: Node):
