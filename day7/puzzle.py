@@ -59,7 +59,7 @@ def part_1():
                     # print(f"New beams {beams} at y {y_graph} split at {beam}")
                     
         print(f"Has split {num_times_splinter_in_path} times")
-        
+
 class Splinter:
     def __init__(self, x_graph: int, y_graph: int):
         self.x = x_graph
@@ -121,44 +121,111 @@ class Node:
         
     def __repr__(self):
         return f"Node at {self.splinter}"
+
+calculated_paths = defaultdict(int)
+def get_num_paths_from_node(node: Node) -> int:
+    """
+    Function for recursively getting number of paths in node by recursively
+    adding up number of paths from children
+    """
+    if calculated_paths[node.splinter.to_id()] != 0:
+        return calculated_paths[node.splinter.to_id()]
     
+    total = 0
+    print(f"Getting number of paths from {node} with left {node.left} and right {node.right}")
+    
+    if node.left == None:
+        total += 1
+        print(f"No left child just add 1 to get sum {total}")
+    else:
+        additon = get_num_paths_from_node(node.left)
+        total += additon
+        print(f"{node} Getting for sum of {node.left} = {additon} to get sum {total}")
+        
+        
+    if node.right == None:
+        total += 1
+        print(f"No right child just adding 1 to sum to get {total}")
+    else:
+        addition = get_num_paths_from_node(node.right)
+        total += addition
+        print(f"{node} Gettign sum for right {node.right} = {addition} to get sum {total}")
+        
+        
+    calculated_paths[node.splinter.to_id()] = total
+    return total
+
+visited_children: list[Node] = []
+
+def get_left_child(node: Node) -> Node | None:
+    children: list[Splinter] = node_index[node.splinter.to_id()]
+    if len(children) == 0:
+        return None
+    elif len(children) == 1:
+        child = children[0]
+        if child.x < node.splinter.x:
+            return Node(splinter=child)
+        else:
+            return None
+    else:
+        for child in children:
+            if child.x < node.splinter.x:
+                return Node(splinter=child)
+            
+        return None
+    
+def get_right_child(node: Node) -> Node | None:
+    children: list[Splinter] = node_index[node.splinter.to_id()]
+    if len(children) == 0:
+        return None
+    elif len(children) == 1:
+        child = children[0]
+        if child.x > node.splinter.x:
+            return Node(splinter=child)
+        else:
+            return None
+    else:
+        for child in children:
+            if child.x > node.splinter.x:
+                return Node(splinter=child)
+            
+        return None
+
+def return_if_node_in_visited(node: Node) -> bool:
+    global visited_children
+    
+    in_visited = False
+    for visited in visited_children:
+        if visited.splinter == node.splinter:
+            in_visited = True
+            break
+        
+    return in_visited
+
 def build_tree(node: Node):
     """
     Function that builds tree from a node
     """
-    children: list[Splinter] = node_index[node.splinter.to_id()]
-    if len(children) == 0:
-        return
-    elif len(children) == 1:
-        child = children[0]
-        # Check if child is left
-        if child.x < node.splinter.x:
-            left_child = Node(splinter=child)
-            node.assing_left_child(left=left_child)
+    global visited_children
+    print(f"Processing node {node}")
+    
+    left_child = get_left_child(node=node)
+    right_child = get_right_child(node=node)
+    
+    if left_child:
+        print(f"{node} has left child {left_child}")
+        node.assing_left_child(left_child)
+        if return_if_node_in_visited(left_child) == False:
+            # print(f"Left child {left_child} was not in {visited_children}")
             build_tree(left_child)
-        else:
-            right_child = Node(splinter=child)
-            node.assign_right_child(right_child)
-            build_tree(right_child)
-    else:
-        child_1 = children[0]
-        child_2 = children[1]
-        
-        # Child 1 is left child
-        if child_1.x < node.splinter.x:
-            left_child = Node(splinter=child_1)
-            right_child = Node(splinter=child_2)
-            node.assign_right_child(right=right_child)
-            node.assing_left_child(left=left_child)
-            build_tree(left_child)
-            build_tree(right_child)
-        else:
-            left_child = Node(splinter=child_2)
-            right_child = Node(splinter=child_1)
-            node.assign_right_child(right=right_child)
-            node.assing_left_child(left=left_child)
-            build_tree(left_child)
-            build_tree(right_child)
+    if right_child:
+        print(f"{node} has right child {right_child}")
+        node.assign_right_child(right=right_child)
+        if return_if_node_in_visited(right_child) == False:
+            # print(f"Right child {right_child} was not in {visited_children}")
+            build_tree(node=right_child)
+
+    visited_children.append(node)        
     
 node_index = defaultdict(list)
 
@@ -297,7 +364,7 @@ def part_2():
         print(f"\nConstructed Tree\n")
         print_tree(root_node)
         
-        print(f"Num")
+        print(f"Number paths: {get_num_paths_from_node(root_node)}")
         
 part_2()
     
